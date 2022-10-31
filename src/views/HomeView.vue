@@ -1,19 +1,19 @@
 <template>
   <div style="text-align: center;">
     <div>
-      <NGradientText type="info">
-        <h1>EEGreader</h1>
-      </NGradientText>
+      <n-gradient-text type="info">
+        <h1>EEGreader - Index</h1>
+      </n-gradient-text>
     </div>
-    <NButton class="button" color="#8a2be2" @click="readEEG">读取EEG文件</NButton>
-    <NButton class="button" color="#ff69b4" @click="test">按钮</NButton>
+    <n-button class="button" color="#8a2be2" @click="readEEG">读取EEG文件</n-button>
+    <n-button class="button" color="#3050fd" @click="bigFive">大五人格测试</n-button>
+    <n-button class="button" color="#ff69b4" @click="test">按钮</n-button>
 
     <EEGViewer />
   </div>
 </template>
 
 <script>
-import { NButton, NGradientText } from 'naive-ui';
 
 import { getData } from '../eeg.js';
 
@@ -30,6 +30,9 @@ export default {
   methods: {
     readEEG() {
       this.input.click();
+    },
+    bigFive() {
+      this.$router.push('/bigFive');
     },
     test() {
       location.href = 'https://mmdjiji.com';
@@ -78,7 +81,7 @@ export default {
     }
   },
   components: {
-    NButton, NGradientText, EEGViewer
+    EEGViewer
   }
 }
 </script>

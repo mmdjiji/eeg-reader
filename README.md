@@ -1,2 +1,2 @@
-# EEGreader
+# EEG Reader
 
