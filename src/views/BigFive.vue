@@ -25,7 +25,8 @@
         <li>外向性（Extraversion）：指个体对外部世界的积极投入程度。</li>
         <li>宜人性（Agreeableness）：指个体在合作与社会和谐性方面的差异。</li>
         <li>神经质（Neuroticism）：指个体体验消极情绪的倾向。</li>
-        <a target="_blank" href="https://www.psy.com.cn/lb/html/166.htm">NEO在线量表</a>
+        <a target="_blank" href="https://www.xmcs.cn/x/dwrg60">NEO-60</a>&nbsp;
+        <a target="_blank" href="https://www.xmcs.cn/x/dwrg240">NEO-240</a>
       </n-alert>
     </div>
     
