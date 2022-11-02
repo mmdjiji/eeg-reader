@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/bigFive',
+      path: '/big-five',
       name: 'Big Five',
       component: () => import('../views/BigFive.vue')
     }

@@ -2,7 +2,7 @@
   <div style="text-align: center;">
     <div>
       <n-gradient-text type="info">
-        <h1>EEGreader - Index</h1>
+        <h1>EEG Reader - Index</h1>
       </n-gradient-text>
     </div>
     <n-button class="button" color="#8a2be2" @click="readEEG">读取EEG文件</n-button>
@@ -15,7 +15,7 @@
 
 <script>
 
-import { getData } from '../eeg.js';
+import { batchData } from '../eeg.js';
 
 import EEGViewer from '@/components/EEGViewer.vue';
 
@@ -32,7 +32,7 @@ export default {
       this.input.click();
     },
     bigFive() {
-      this.$router.push('/bigFive');
+      this.$router.push('/big-five');
     },
     test() {
       location.href = 'https://mmdjiji.com';
@@ -41,7 +41,6 @@ export default {
   mounted() {
     this.input.onchange = () => {
       const file = this.input.files[0];
-      const data = { ch1: [], ch2: [] };
       if(!!file) {
         const reader = new FileReader();
         reader.readAsArrayBuffer(file);
@@ -54,24 +53,8 @@ export default {
           for(let i = 0; i < length; ++i) {
             buffer.push(dataView.getUint8(i));
           }
-          console.log(buffer);
-          let goodData = 0, badData = 0;
-          for(let i = 0; i < length; ++i) {
-            if(buffer[i] === 170 && buffer[i+1] === 170 && buffer[i+2] === 131) {
-              const temp = getData(buffer.slice(i, i+104));
-              if(temp) {
-                for(let j of temp.ch1) {
-                  data.ch1.push(j);
-                }
-                for(let j of temp.ch2) {
-                  data.ch2.push(j);
-                }
-                ++goodData;
-              } else {
-                ++badData;
-              }
-            }
-          }
+          console.log('buffer:', buffer);
+          const { goodData, badData, data } = batchData(buffer);
           console.log('data:', data);
           console.log('goodData:', goodData);
           console.log('badData:', badData);

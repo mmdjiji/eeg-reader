@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "echarts": "^5.4.0",
+    "ml-convolution": "^2.0.0",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5"
   },
