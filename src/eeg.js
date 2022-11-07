@@ -127,7 +127,7 @@ const filter = (data) => {
  * @param data with length 104
  * @return { ch1, ch2 }
  */
- const getData = (data) => {
+const getData = (data) => {
 
   if(!validate(data)) return;
   const ch1 = [];

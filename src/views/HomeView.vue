@@ -7,6 +7,7 @@
     </div>
     <n-button class="button" color="#8a2be2" @click="readEEG">读取EEG文件</n-button>
     <n-button class="button" color="#3050fd" @click="bigFive">大五人格测试</n-button>
+    <n-button class="button" color="#6ead6f" @click="realTime">实时采集</n-button>
     <n-button class="button" color="#ff69b4" @click="test">按钮</n-button>
 
     <EEGViewer />
@@ -33,6 +34,9 @@ export default {
     },
     bigFive() {
       this.$router.push('/big-five');
+    },
+    realTime() {
+      this.$router.push('/real-time');
     },
     test() {
       location.href = 'https://mmdjiji.com';

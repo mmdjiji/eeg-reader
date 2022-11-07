@@ -13,6 +13,11 @@ const router = createRouter({
       path: '/big-five',
       name: 'Big Five',
       component: () => import('../views/BigFive.vue')
+    },
+    {
+      path: '/real-time',
+      name: 'Real Time',
+      component: () => import('../views/RealTime.vue')
     }
   ]
 })
