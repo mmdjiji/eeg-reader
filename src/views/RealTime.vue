@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 0 auto;">
+  <div id="guide" style="margin: 0 auto;" v-if="guide">
     <div style="text-align: center;">
       <n-gradient-text type="info">
         <h1>实时采集</h1>
@@ -10,15 +10,29 @@
       <n-button class="button" color="#0f5a6f" @click="start">开始采集</n-button>
     </div>
   </div>
+  <div id="show" v-if="show" class="content">
+    <p class="word">标题</p>
+    <p class="word">第一行</p>
+    <p class="word">第二行</p>
+    <p class="word">+</p>
+    <p class="word">第四行</p>
+    <p class="word">第五行</p>
+    <p class="word">按空格继续</p>
+  </div>
 </template>
 
 
 <script>
+import screenfull from 'screenfull';
+
 export default {
   data() {
     let port = {};
     let recvBuffer = [];
     let stage = 0;
+
+    let guide = true;
+    let show = false;
     /**
      * stage 0: 未连接
      * stage 1: 开始并发送 AT+ROLE=0\r\n 等待
@@ -27,7 +41,7 @@ export default {
      * stage 4: 接收到扫描数据，等待选择
      * stage 5: 发送 AT+CONN=0,A6C080030009 等待
      */
-    return { port, recvBuffer, stage };
+    return { port, recvBuffer, stage, guide, show };
   },
   methods: {
     str2ascii(str) {
@@ -105,6 +119,33 @@ export default {
     },
     async start() {
       console.log('开始采集');
+
+      const body = document.body;
+
+      // shift to show
+      this.guide = false;
+      this.show = true;
+
+      body.setAttribute('style', 'background: #000000; cursor: none;');
+
+      if(screenfull.isEnabled && !screenfull.isFullscreen) {
+        screenfull.toggle();
+      } else {
+        alert('浏览器不支持全屏，请按 F11 手动调整全屏');
+      }
+
+      // const keyDown = (event) => {
+      //     if(screenfull.isEnabled) {
+      //       if(screenfull.isFullscreen) {
+      //         body.setAttribute('style', 'background: #000000; cursor: none;');
+      //       } else {
+      //         body.setAttribute('style', 'background: #ffffff;');
+      //       }
+      //     }
+      //   }
+
+      // window.addEventListener("keydown", keyDown, true); 
+      // document.addEventListener("fullscreenchange", keyDown, true);
     }
   },
   mounted() {
@@ -116,5 +157,22 @@ export default {
 <style scoped>
 .button {
   margin: 0 10px;
+}
+.content{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  margin: auto;
+}
+
+.word {
+  position: relative;
+  font-size: 3rem;
+  text-align: center;
+  color: #ffffff;
 }
 </style>
