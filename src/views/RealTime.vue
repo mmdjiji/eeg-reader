@@ -11,13 +11,13 @@
     </div>
   </div>
   <div id="show" v-if="show" class="content">
-    <p class="word">标题</p>
-    <p class="word">第一行</p>
-    <p class="word">第二行</p>
-    <p class="word">+</p>
-    <p class="word">第四行</p>
-    <p class="word">第五行</p>
-    <p class="word">按空格继续</p>
+    <p class="word">{{ ctx[0] }}</p>
+    <p class="word">{{ ctx[1] }}</p>
+    <p class="word">{{ ctx[2] }}</p>
+    <p class="word">{{ ctx[3] }}</p>
+    <p class="word">{{ ctx[4] }}</p>
+    <p class="word">{{ ctx[5] }}</p>
+    <p class="word">{{ ctx[6] }}</p>
   </div>
 </template>
 
@@ -33,6 +33,9 @@ export default {
 
     let guide = true;
     let show = false;
+
+    let ctx = ['　', '　', '　', '　', '　', '　', '　'];
+
     /**
      * stage 0: 未连接
      * stage 1: 开始并发送 AT+ROLE=0\r\n 等待
@@ -41,7 +44,7 @@ export default {
      * stage 4: 接收到扫描数据，等待选择
      * stage 5: 发送 AT+CONN=0,A6C080030009 等待
      */
-    return { port, recvBuffer, stage, guide, show };
+    return { port, recvBuffer, stage, guide, show, ctx };
   },
   methods: {
     str2ascii(str) {
@@ -66,6 +69,23 @@ export default {
         console.log(str, data)
         await writer.releaseLock();
       }
+    },
+    async sleep(seconds) {
+      return new Promise((resolve) => setTimeout(resolve, seconds));
+    },
+    async setLine(line, ctx) {
+      this.ctx[line] = ctx;
+    },
+    async clearLine(line) {
+      this.ctx[line] = '　';
+    },
+    async execute() {
+      await this.sleep(1000);
+      this.setLine(3, '请注视中心');
+      await this.sleep(3000);
+      this.setLine(3, '+');
+      await this.sleep(5000);
+      this.setLine(3, '好的，测试成功');
     },
     async connect() {
       if(this.stage !== 0) return;
@@ -146,6 +166,8 @@ export default {
 
       // window.addEventListener("keydown", keyDown, true); 
       // document.addEventListener("fullscreenchange", keyDown, true);
+
+      await this.execute();
     }
   },
   mounted() {
@@ -168,7 +190,6 @@ export default {
   right: 0px;
   margin: auto;
 }
-
 .word {
   position: relative;
   font-size: 3rem;
