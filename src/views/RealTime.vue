@@ -92,11 +92,11 @@ export default {
     },
     async execute() {
       await this.sleep(1000);
-      this.setLine(3, '请注视中心');
+      await this.setLine(3, '请注视中心');
       await this.sleep(3000);
-      this.setLine(3, '+');
+      await this.setLine(3, '+');
       await this.sleep(3000);
-      this.setLine(3, '好的，现在测试一下按空格');
+      await this.setLine(3, '好的，现在测试一下按空格');
       await this.waitKey('Space');
       await this.setLine(3, '你按下了空格');
       await this.waitKey('Space');
