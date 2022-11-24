@@ -79,13 +79,32 @@ export default {
     async clearLine(line) {
       this.ctx[line] = '　';
     },
+    async waitKey(code) {
+      return new Promise((resolve, reject) => {
+        const keyDown = (event) => {
+          if(code === event.code) {
+            window.removeEventListener("keydown", keyDown, true);
+            resolve();
+          }
+        }
+        window.addEventListener("keydown", keyDown, true);
+      });
+    },
     async execute() {
       await this.sleep(1000);
       this.setLine(3, '请注视中心');
       await this.sleep(3000);
       this.setLine(3, '+');
-      await this.sleep(5000);
-      this.setLine(3, '好的，测试成功');
+      await this.sleep(3000);
+      this.setLine(3, '好的，现在测试一下按空格');
+      await this.waitKey('Space');
+      await this.setLine(3, '你按下了空格');
+      await this.waitKey('Space');
+      await this.setLine(3, '你又按下了一次空格');
+      await this.waitKey('Space');
+      await this.setLine(3, '你又又又按下了N次空格');
+      await this.sleep(3000);
+      await this.setLine(3, '实验结束，好耶');
     },
     async connect() {
       if(this.stage !== 0) return;
