@@ -30,12 +30,6 @@ export default {
     let port = {};
     let recvBuffer = [];
     let stage = 0;
-
-    let guide = true;
-    let show = false;
-
-    let ctx = ['　', '　', '　', '　', '　', '　', '　'];
-
     /**
      * stage 0: 未连接
      * stage 1: 开始并发送 AT+ROLE=0\r\n 等待
@@ -44,6 +38,12 @@ export default {
      * stage 4: 接收到扫描数据，等待选择
      * stage 5: 发送 AT+CONN=0,A6C080030009 等待
      */
+
+    let guide = true;
+    let show = false;
+
+    let ctx = ['　', '　', '　', '　', '　', '　', '　'];
+
     return { port, recvBuffer, stage, guide, show, ctx };
   },
   methods: {
@@ -80,11 +80,13 @@ export default {
       this.ctx[line] = '　';
     },
     async waitKey(code) {
+      const startTime = Date.now();
       return new Promise((resolve, reject) => {
         const keyDown = (event) => {
           if(code === event.code) {
             window.removeEventListener("keydown", keyDown, true);
-            resolve();
+            const endTime = Date.now();
+            resolve(endTime - startTime);
           }
         }
         window.addEventListener("keydown", keyDown, true);
@@ -97,14 +99,15 @@ export default {
       await this.setLine(3, '+');
       await this.sleep(3000);
       await this.setLine(3, '好的，现在测试一下按空格');
-      await this.waitKey('Space');
-      await this.setLine(3, '你按下了空格');
-      await this.waitKey('Space');
-      await this.setLine(3, '你又按下了一次空格');
-      await this.waitKey('Space');
-      await this.setLine(3, '你又又又按下了N次空格');
+      const t1 = await this.waitKey('Space');
+      await this.setLine(3, `你按下了空格，用时${t1}毫秒`);
+      const t2 = await this.waitKey('Space');
+      await this.setLine(3, `你又按下了一次空格，用时${t2}毫秒`);
+      const t3 = await this.waitKey('Space');
+      await this.setLine(3, `你又又又按下了N次空格，用时${t3}毫秒`);
       await this.sleep(3000);
       await this.setLine(3, '实验结束，好耶');
+      
     },
     async connect() {
       if(this.stage !== 0) return;
@@ -147,7 +150,6 @@ export default {
               }
             }
           } catch (err) {
-            // read err
             console.error(err);
           }
         }
@@ -157,15 +159,10 @@ export default {
       }
     },
     async start() {
-      console.log('开始采集');
-
-      const body = document.body;
-
       // shift to show
       this.guide = false;
       this.show = true;
-
-      body.setAttribute('style', 'background: #000000; cursor: none;');
+      document.body.setAttribute('style', 'background: #000000; cursor: none;');
 
       if(screenfull.isEnabled && !screenfull.isFullscreen) {
         screenfull.toggle();
@@ -173,19 +170,7 @@ export default {
         alert('浏览器不支持全屏，请按 F11 手动调整全屏');
       }
 
-      // const keyDown = (event) => {
-      //     if(screenfull.isEnabled) {
-      //       if(screenfull.isFullscreen) {
-      //         body.setAttribute('style', 'background: #000000; cursor: none;');
-      //       } else {
-      //         body.setAttribute('style', 'background: #ffffff;');
-      //       }
-      //     }
-      //   }
-
-      // window.addEventListener("keydown", keyDown, true); 
-      // document.addEventListener("fullscreenchange", keyDown, true);
-
+      // play execute
       await this.execute();
     }
   },
